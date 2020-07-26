@@ -3,6 +3,8 @@ package jm.task.core.jdbc.model;
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 @Table
 public class User {
@@ -26,6 +28,24 @@ public class User {
         this.name = name;
         this.lastName = lastName;
         this.age = age;
+    }
+
+
+    public User(ResultSet resultSet) throws SQLException {
+        this.id = resultSet.getLong("id");
+        this.name = resultSet.getString("name");
+        this.lastName = resultSet.getString("lastName");
+        this.age = resultSet.getByte("age");
+    }
+
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "name='" + name + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", age=" + age +
+                '}';
     }
 
     public Long getId() {
