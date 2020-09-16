@@ -2,7 +2,6 @@ package jm.task.core.jdbc.dao;
 
 import jm.task.core.jdbc.model.User;
 import jm.task.core.jdbc.util.Util;
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
@@ -14,11 +13,9 @@ import java.util.List;
 public class UserDaoHibernateImpl implements UserDao {
     private Session session;
     List<User> users;
-    ;
 
     public UserDaoHibernateImpl() {
     }
-
 
     @Override
     public void createUsersTable() {
