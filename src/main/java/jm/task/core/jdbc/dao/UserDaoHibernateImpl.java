@@ -4,9 +4,8 @@ import jm.task.core.jdbc.model.User;
 import jm.task.core.jdbc.util.Util;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-
+import org.hibernate.exception.SQLGrammarException;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.List;
 
 
@@ -21,16 +20,19 @@ public class UserDaoHibernateImpl implements UserDao {
     public void createUsersTable() {
         try {
             Util util = new Util();
+            session = util.getHibernateUtilConnection();
+            Transaction transaction = session.beginTransaction();
             String createUserTableQuery = "CREATE TABLE `users`.`users`" +
                     "(  `id` INT NOT NULL AUTO_INCREMENT," +
                     "  `name` VARCHAR(45) NOT NULL," +
                     "  `lastName` VARCHAR(45) NOT NULL," +
                     "  `age` tinyint(4) NOT NULL," +
                     "PRIMARY KEY (`id`))";
-            Statement statement = util.getJDBCUtilConnection().createStatement();
-            statement.executeUpdate(createUserTableQuery);
-            statement.close();
-        } catch (SQLException sqlException) {
+            session.createSQLQuery(createUserTableQuery).executeUpdate();
+            transaction.commit();
+            util.getHibernateUtilConnection().close();
+            session.close();
+        } catch (SQLGrammarException sqlGrammarException){
             System.out.println("Such table already exists");
         }
     }
@@ -39,11 +41,14 @@ public class UserDaoHibernateImpl implements UserDao {
     public void dropUsersTable() {
         try {
             Util util = new Util();
+            session = util.getHibernateUtilConnection();
+            Transaction transaction = session.beginTransaction();
             String dropUsersTableQuery = "DROP TABLE IF EXISTS `users`.`users`";
-            Statement statement = util.getJDBCUtilConnection().createStatement();
-            statement.executeUpdate(dropUsersTableQuery);
-            statement.close();
-        } catch (SQLException sqlException) {
+            session.createSQLQuery(dropUsersTableQuery).executeUpdate();
+            transaction.commit();
+            util.getHibernateUtilConnection().close();
+            session.close();
+        } catch (SQLGrammarException sqlGrammarException) {
             System.out.println("There is not such table exists");
         }
     }
