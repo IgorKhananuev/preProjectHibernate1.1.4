@@ -5,7 +5,6 @@ import jm.task.core.jdbc.util.Util;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.exception.SQLGrammarException;
-import java.sql.SQLException;
 import java.util.List;
 
 
@@ -20,7 +19,7 @@ public class UserDaoHibernateImpl implements UserDao {
     public void createUsersTable() {
         try {
             Util util = new Util();
-            session = util.getHibernateUtilConnection();
+            session = util.hibernateUtilConnection();
             Transaction transaction = session.beginTransaction();
             String createUserTableQuery = "CREATE TABLE `users`.`users`" +
                     "(  `id` INT NOT NULL AUTO_INCREMENT," +
@@ -30,7 +29,7 @@ public class UserDaoHibernateImpl implements UserDao {
                     "PRIMARY KEY (`id`))";
             session.createSQLQuery(createUserTableQuery).executeUpdate();
             transaction.commit();
-            util.getHibernateUtilConnection().close();
+            util.hibernateUtilConnection().close();
             session.close();
         } catch (SQLGrammarException sqlGrammarException){
             System.out.println("Such table already exists");
@@ -41,12 +40,12 @@ public class UserDaoHibernateImpl implements UserDao {
     public void dropUsersTable() {
         try {
             Util util = new Util();
-            session = util.getHibernateUtilConnection();
+            session = util.hibernateUtilConnection();
             Transaction transaction = session.beginTransaction();
             String dropUsersTableQuery = "DROP TABLE IF EXISTS `users`.`users`";
             session.createSQLQuery(dropUsersTableQuery).executeUpdate();
             transaction.commit();
-            util.getHibernateUtilConnection().close();
+            util.hibernateUtilConnection().close();
             session.close();
         } catch (SQLGrammarException sqlGrammarException) {
             System.out.println("There is not such table exists");
@@ -57,42 +56,42 @@ public class UserDaoHibernateImpl implements UserDao {
     public void saveUser(String name, String lastName, byte age) {
         User user = new User(name, lastName, age);
         Util util = new Util();
-        session = util.getHibernateUtilConnection();
+        session = util.hibernateUtilConnection();
         Transaction transaction = session.beginTransaction();
         session.save(user);
         transaction.commit();
-        util.getHibernateUtilConnection().close();
+        util.hibernateUtilConnection().close();
         session.close();
     }
 
     @Override
     public void removeUserById(long id) {
         Util util = new Util();
-        session = util.getHibernateUtilConnection();
+        session = util.hibernateUtilConnection();
         Transaction transaction = session.beginTransaction();
         User removedUser = (User) session.get(User.class, id);
         session.delete(removedUser);
         transaction.commit();
-        util.getHibernateUtilConnection().close();
+        util.hibernateUtilConnection().close();
         session.close();
     }
 
     @Override
     public List<User> getAllUsers() {
         Util util = new Util();
-        session = util.getHibernateUtilConnection();
+        session = util.hibernateUtilConnection();
         Transaction transaction = session.beginTransaction();
         users = (List<User>) session.createCriteria(User.class).list();
         transaction.commit();
         session.close();
-        util.getHibernateUtilConnection().close();
+        util.hibernateUtilConnection().close();
         return users;
     }
 
     @Override
     public void cleanUsersTable() {
         Util util = new Util();
-        session = util.getHibernateUtilConnection();
+        session = util.hibernateUtilConnection();
         Transaction transaction = session.beginTransaction();
         List<User> cleanedUserList = (List<User>) session.createCriteria(User.class).list();
         for (User u : cleanedUserList) {
@@ -100,7 +99,7 @@ public class UserDaoHibernateImpl implements UserDao {
         }
         transaction.commit();
         session.close();
-        util.getHibernateUtilConnection().close();
+        util.hibernateUtilConnection().close();
     }
 }
 

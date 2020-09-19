@@ -28,10 +28,9 @@ public class Util {
         return JDBCUtilConnection();
     }
 
-    private Session HibernateUtilConnection() {
+    public Session hibernateUtilConnection() {
         Properties prop = new Properties();
         prop.setProperty("hibernate.connection.url", "jdbc:mysql://localhost:3306/users?serverTimezone=Europe/Minsk&useSSL=false");
-
         prop.setProperty("dialect", "org.hibernate.dialect.MySQLDialect");
         prop.setProperty("hibernate.connection.username", "root");
         prop.setProperty("hibernate.connection.password", "root");
@@ -39,10 +38,6 @@ public class Util {
         prop.setProperty("show_sql", String.valueOf(true));
         SessionFactory sessionFactory = new Configuration().addProperties(prop).addAnnotatedClass(User.class).buildSessionFactory();
         return sessionFactory.openSession();
-    }
-
-    public Session getHibernateUtilConnection() {
-        return HibernateUtilConnection();
     }
 }
 
